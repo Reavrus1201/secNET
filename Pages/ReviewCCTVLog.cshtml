@@ -1,0 +1,247 @@
+﻿@page
+@model secNET.Pages.ReviewCCTVLogModel
+@{
+    ViewData["Title"] = "Review CCTV Log";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - secNET</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js" defer></script>
+    <style>
+        .table th, .table td {
+            vertical-align: middle;
+            padding: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-section td.yes-no input[type="radio"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #666;
+            border-radius: 50%;
+            position: relative;
+            cursor: not-allowed;
+            margin: 0 8px 0 2px;
+            vertical-align: middle;
+            opacity: 0.8;
+        }
+
+            /* Checked state for Yes */
+            .form-section td.yes-no input[type="radio"][value="Yes"]:checked {
+                background-color: #28a745;
+                border-color: #28a745;
+            }
+
+            /* Checked state for No */
+            .form-section td.yes-no input[type="radio"][value="No"]:checked {
+                background-color: #FF4040;
+                border-color: #FF4040;
+            }
+
+            /* Checkmark for both Yes and No */
+            .form-section td.yes-no input[type="radio"]:checked::after {
+                content: '\2713'; /* Unicode for checkmark */
+                color: #ffffff;
+                font-size: 16px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+        .form-section td.yes-no label {
+            vertical-align: middle;
+        }
+
+        /* Custom style for disabled/greyed out fields */
+        .disabled-field {
+            background-color: #f8f9fa !important;
+            border-bottom: 2px solid #d1d1d1 !important;
+            cursor: not-allowed !important;
+        }
+
+        /* Custom style for the submit button */
+        .btn-submit-review {
+            background: linear-gradient(90deg, #FF4040, #E63939) !important; /* Red gradient */
+            border: none !important;
+            padding: 12px 30px !important;
+            font-size: 16px !important;
+            border-radius: 5px !important;
+            margin: 0 10px !important;
+            transition: transform 0.2s ease !important;
+        }
+
+            .btn-submit-review:hover {
+                transform: scale(1.05) !important; /* Slight scale on hover */
+            }
+
+            .btn-submit-review:disabled {
+                background: linear-gradient(90deg, #d1d1d1, #b0b0b0) !important; /* Grey gradient for disabled */
+                cursor: not-allowed !important;
+            }
+
+        /* Validation error message */
+        .validation-error {
+            color: #d83b01;
+            font-size: 12px;
+            display: block;
+            margin-top: 10px;
+            background-color: #ffebee;
+            padding: 5px;
+            border-radius: 3px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <main id="main-content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Review CCTV Log</h1>
+        </div>
+
+        <div class="cctv-form-container">
+            <h2>Review DAILY CCTV MONITORING LOG</h2>
+            <form method="post">
+                <div class="header-section">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label asp-for="CCTVLog.BranchName">Store Name:</label>
+                            <input asp-for="CCTVLog.BranchName" class="form-control disabled-field" readonly />
+                        </div>
+                        @if (ViewData["IsSuperUser"] != null && (bool)ViewData["IsSuperUser"])
+                        {
+                            <div class="col-md-6 form-group">
+                                <label asp-for="CCTVLog.SelectedBranchId">Assign to Branch:</label>
+                                <select asp-for="CCTVLog.SelectedBranchId" asp-items="@(new SelectList(Model.CCTVLog.AvailableBranches, "Id", "BranchName"))" class="form-control">
+                                    <option value="">-- Select a Branch --</option>
+                                </select>
+                                <span asp-validation-for="CCTVLog.SelectedBranchId" class="text-danger"></span>
+                            </div>
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label asp-for="CCTVLog.OperatorName">Operator Name:</label>
+                            <input asp-for="CCTVLog.OperatorName" class="form-control disabled-field" readonly />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label asp-for="CCTVLog.Date">Date:</label>
+                            <input asp-for="CCTVLog.Date" class="form-control disabled-field" readonly />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label asp-for="CCTVLog.ShiftType">Shift Type:</label>
+                            <input asp-for="CCTVLog.ShiftType" class="form-control disabled-field" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <div class="compliance-percentage">
+                                @($"{Model.CCTVLog.CompliancePercentage:F2}%")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @for (int i = 0; i < Model.CCTVLog.Sections.Count; i++)
+                {
+                    var logSection = Model.CCTVLog.Sections.ElementAt(i);
+                    <div class="form-section">
+                        <h3>@logSection.Key</h3>
+                        <input type="hidden" name="SectionKeys[@i]" value="@logSection.Key" />
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure / Policy</th>
+                                    <th>Yes / No</th>
+                                    <th>CRO Comments</th>
+                                    <th>Managers & Supervisors Action Taken</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int j = 0; j < logSection.Value.Questions.Count; j++)
+                                {
+                                    var question = logSection.Value.Questions.ElementAt(j);
+                                    <tr>
+                                        <td>@question.Key</td>
+                                        <td class="yes-no">
+                                            <input type="hidden" name="QuestionKeys[@i][@j]" value="@question.Key" data-section="@logSection.Key" />
+                                            <input type="hidden" name="QuestionValues[@i][@j]" value="@question.Value" />
+                                            <label><input type="radio" name="QuestionValues[@i][@j]_display" value="Yes" @(question.Value == "Yes" ? "checked" : "") disabled /> Yes</label>
+                                            <label><input type="radio" name="QuestionValues[@i][@j]_display" value="No" @(question.Value == "No" ? "checked" : "") disabled /> No</label>
+                                        </td>
+                                        <td class="cro-comments">
+                                            <textarea name="CROComments[@i][@j]" rows="1" class="form-control disabled-field" readonly data-section="@logSection.Key" data-question="@question.Key">@(logSection.Value.CROComments != null && logSection.Value.CROComments.ContainsKey(question.Key) ? logSection.Value.CROComments[question.Key] : "")</textarea>
+                                        </td>
+                                        <td class="managers-action">
+                                            @if (Model.CCTVLog.Status == "Completed")
+                                            {
+                                                <textarea name="ManagersActionTaken[@i][@j]" rows="1" class="form-control disabled-field" readonly data-section="@logSection.Key" data-question="@question.Key">@(logSection.Value.ManagersActionTaken != null && logSection.Value.ManagersActionTaken.ContainsKey(question.Key) ? logSection.Value.ManagersActionTaken[question.Key] : "")</textarea>
+                                            }
+                                            else
+                                            {
+                                                <textarea name="ManagersActionTaken[@i][@j]" rows="1" class="form-control" data-section="@logSection.Key" data-question="@question.Key">@(logSection.Value.ManagersActionTaken != null && logSection.Value.ManagersActionTaken.ContainsKey(question.Key) ? logSection.Value.ManagersActionTaken[question.Key] : "")</textarea>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+                <div class="notes-section">
+                    <div class="form-group">
+                        <label>Operator Notes:</label>
+                        <textarea asp-for="CCTVLog.Comments" rows="4" class="form-control disabled-field" readonly></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Branch Manager Notes:</label>
+                        <textarea asp-for="CCTVLog.BranchManagerNotes" rows="4" class="form-control" required></textarea>
+                        <span asp-validation-for="CCTVLog.BranchManagerNotes" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="CCTVLog.ReportSeenBy" type="hidden" />
+                    </div>
+                    <div class="form-group">
+                        <label>Branch Manager:</label>
+                        <input asp-for="CCTVLog.BranchManager" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Report Seen (Insert date report was read):</label>
+                        <input asp-for="CCTVLog.DateOfReportSeen" type="date" class="form-control" required />
+                        <span asp-validation-for="CCTVLog.DateOfReportSeen" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <input type="hidden" asp-for="CCTVLog.Id" />
+
+                <div class="form-buttons">
+                    @if (Model.CCTVLog.Status == "Completed")
+                    {
+                        <button type="submit" class="btn btn-submit-review" disabled>Submit Review</button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-submit-review">Submit Review</button>
+                    }
+                    <div class="form-help">
+                        <span class="help-text">Submissions are final. Verify all data before submitting.</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

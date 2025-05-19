@@ -1,0 +1,302 @@
+﻿@page
+@model secNET.Pages.IncidentReportModel
+@{
+    ViewData["Title"] = "Log An Incident";
+}
+
+<!-- Main Content -->
+<main id="main-content" class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10">
+            <h1 class="h2">Log An Incident</h1>
+            <div class="card incident-report-card">
+                <div class="card-body">
+                    <form method="post">
+                        <!-- Validation Summary -->
+                        <div asp-validation-summary="All" class="alert alert-danger d-none" role="alert"></div>
+
+                        <!-- Report Type and Branch -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="IncidentReport.Type" class="form-label">Report Type</label>
+                                    <select asp-for="IncidentReport.Type" asp-items="Model.ReportTypes" class="form-control custom-select" onchange="toggleReportFields()">
+                                        <option value="">Select a report type</option>
+                                    </select>
+                                    <span asp-validation-for="IncidentReport.Type" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="IncidentReport.BranchId" class="form-label">Branch</label>
+                                    @if (ViewData["IsSuperUser"] != null && (bool)ViewData["IsSuperUser"])
+                                    {
+                                        <select asp-for="IncidentReport.BranchId" asp-items="Model.Branches" class="form-control custom-select">
+                                            <option value="">Select a branch</option>
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <select asp-for="IncidentReport.BranchId" asp-items="Model.Branches" class="form-control custom-select" disabled="disabled"></select>
+                                        <input type="hidden" asp-for="IncidentReport.BranchId" />
+                                    }
+                                    <span asp-validation-for="IncidentReport.BranchId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Incident Date and Time -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="IncidentReport.IncidentDate" class="form-label">Incident Date</label>
+                                    <input asp-for="IncidentReport.IncidentDate" class="form-control" type="date" />
+                                    <span asp-validation-for="IncidentReport.IncidentDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="IncidentReport.IncidentTime" class="form-label">Incident Time (24-hour format, e.g., 14:30)</label>
+                                    <input asp-for="IncidentReport.IncidentTime" type="time" class="form-control" />
+                                    <span asp-validation-for="IncidentReport.IncidentTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reported By -->
+                        <div class="form-group">
+                            <label asp-for="IncidentReport.ReportedBy" class="form-label">Reported By</label>
+                            <input asp-for="IncidentReport.ReportedBy" class="form-control" />
+                            <span asp-validation-for="IncidentReport.ReportedBy" class="text-danger"></span>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-group">
+                            <label asp-for="IncidentReport.Description" class="form-label">Incident Description</label>
+                            <textarea asp-for="IncidentReport.Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="IncidentReport.Description" class="text-danger"></span>
+                        </div>
+
+                        <!-- Action Taken -->
+                        <div class="form-group">
+                            <label asp-for="IncidentReport.ActionTaken" class="form-label">Action Taken</label>
+                            <textarea asp-for="IncidentReport.ActionTaken" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="IncidentReport.ActionTaken" class="text-danger"></span>
+                        </div>
+
+                        <!-- Seen By -->
+                        <div class="form-group">
+                            <label asp-for="IncidentReport.SeenBy" class="form-label">Incident Reported or Seen By</label>
+                            <input asp-for="IncidentReport.SeenBy" class="form-control" />
+                            <span asp-validation-for="IncidentReport.SeenBy" class="text-danger"></span>
+                        </div>
+
+                        <!-- Additional Notes -->
+                        <div class="form-group">
+                            <label asp-for="IncidentReport.AdditionalNotes" class="form-label">Additional Notes</label>
+                            <textarea asp-for="IncidentReport.AdditionalNotes" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="IncidentReport.AdditionalNotes" class="text-danger"></span>
+                        </div>
+
+                        <!-- Criminal-Specific Fields -->
+                        <div id="criminalFields" class="collapse">
+                            <h4 class="section-header" data-bs-toggle="collapse" data-bs-target="#criminalFieldsContent" aria-expanded="true" aria-controls="criminalFieldsContent">
+                                Criminal Report Details <i class="fas fa-chevron-down float-end"></i>
+                            </h4>
+                            <div id="criminalFieldsContent" class="collapse show">
+                                <!-- Suspect Type -->
+                                <div class="form-group">
+                                    <label asp-for="IncidentReport.SuspectType" class="form-label">Suspect Type</label>
+                                    <select asp-for="IncidentReport.SuspectType" class="form-control custom-select" onchange="toggleMinorFields()">
+                                        <option value="Adult">Adult</option>
+                                        <option value="Minor">Minor</option>
+                                    </select>
+                                    <span asp-validation-for="IncidentReport.SuspectType" class="text-danger"></span>
+                                </div>
+
+                                <!-- Minor-Specific Fields -->
+                                <div id="minorFields" class="collapse">
+                                    <div class="form-group">
+                                        <label asp-for="IncidentReport.Age" class="form-label">Age</label>
+                                        <input asp-for="IncidentReport.Age" class="form-control" type="number" />
+                                        <span asp-validation-for="IncidentReport.Age" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="IncidentReport.ContactDetails" class="form-label">Guardian/Parent/Teacher Contact</label>
+                                        <input asp-for="IncidentReport.ContactDetails" class="form-control" />
+                                        <span asp-validation-for="IncidentReport.ContactDetails" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Suspect Name -->
+                                <div class="form-group">
+                                    <label asp-for="IncidentReport.SuspectName" class="form-label">Name/Surname/ID of Suspect</label>
+                                    <input asp-for="IncidentReport.SuspectName" class="form-control" />
+                                    <span asp-validation-for="IncidentReport.SuspectName" class="text-danger"></span>
+                                </div>
+
+                                <!-- List Items -->
+                                <div class="form-group">
+                                    <label asp-for="IncidentReport.ListItems" class="form-label">List Items</label>
+                                    <textarea asp-for="IncidentReport.ListItems" class="form-control" rows="3"></textarea>
+                                    <span asp-validation-for="IncidentReport.ListItems" class="text-danger"></span>
+                                </div>
+
+                                <!-- Value of Items -->
+                                <div class="form-group">
+                                    <label asp-for="IncidentReport.ValueItems" class="form-label">Value of Items</label>
+                                    <input asp-for="IncidentReport.ValueItems" class="form-control" type="number" step="0.01" />
+                                    <span asp-validation-for="IncidentReport.ValueItems" class="text-danger"></span>
+                                </div>
+
+                                <!-- Penalty Paid -->
+                                <div class="form-group">
+                                    <label asp-for="IncidentReport.PenaltyPaid" class="form-label">Penalty Paid</label>
+                                    <input asp-for="IncidentReport.PenaltyPaid" class="form-control" type="number" step="0.01" />
+                                    <span asp-validation-for="IncidentReport.PenaltyPaid" class="text-danger"></span>
+                                </div>
+
+                                <!-- CR#/OB# -->
+                                <div class="form-group">
+                                    <label asp-for="IncidentReport.CrOb" class="form-label">CR#/OB#</label>
+                                    <input asp-for="IncidentReport.CrOb" class="form-control" />
+                                    <span asp-validation-for="IncidentReport.CrOb" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- General-Specific Fields -->
+                        <div id="generalFields" class="collapse">
+                            <h4 class="section-header" data-bs-toggle="collapse" data-bs-target="#generalFieldsContent" aria-expanded="true" aria-controls="generalFieldsContent">
+                                General Incident Details <i class="fas fa-chevron-down float-end"></i>
+                            </h4>
+                            <div id="generalFieldsContent" class="collapse show">
+                                <div class="form-group">
+                                    <label for="generalDetails" class="form-label">Additional Details</label>
+                                    <textarea id="generalDetails" name="IncidentReport.GeneralDetails" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Policy Violation-Specific Fields -->
+                        <div id="policyFields" class="collapse">
+                            <h4 class="section-header" data-bs-toggle="collapse" data-bs-target="#policyFieldsContent" aria-expanded="true" aria-controls="policyFieldsContent">
+                                Policy Violation Details <i class="fas fa-chevron-down float-end"></i>
+                            </h4>
+                            <div id="policyFieldsContent" class="collapse show">
+                                <div class="form-group">
+                                    <label for="policyDetails" class="form-label">Violation Details</label>
+                                    <textarea id="policyDetails" name="IncidentReport.PolicyDetails" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary w-50">Create Report</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function updateSelectWidth(selectElement) {
+            const tempSpan = document.createElement('span');
+            tempSpan.style.visibility = 'hidden';
+            tempSpan.style.position = 'absolute';
+            tempSpan.style.whiteSpace = 'nowrap';
+            tempSpan.style.display = 'inline-block';
+            const computedStyle = window.getComputedStyle(selectElement);
+            tempSpan.style.fontFamily = computedStyle.fontFamily;
+            tempSpan.style.fontSize = computedStyle.fontSize;
+            tempSpan.style.fontWeight = computedStyle.fontWeight;
+            tempSpan.style.fontStyle = computedStyle.fontStyle;
+            tempSpan.style.letterSpacing = computedStyle.letterSpacing;
+
+            let maxWidth = 0;
+            Array.from(selectElement.options).forEach(option => {
+                tempSpan.textContent = option.text;
+                selectElement.parentNode.appendChild(tempSpan);
+                const width = tempSpan.offsetWidth;
+                maxWidth = Math.max(maxWidth, width);
+                selectElement.parentNode.removeChild(tempSpan);
+            });
+
+            const extraPadding = 60;
+            selectElement.style.width = `${Math.min(maxWidth + extraPadding, 300)}px`;
+        }
+
+        function toggleReportFields() {
+            var reportType = document.getElementById("IncidentReport_Type").value;
+            var criminalFields = document.getElementById("criminalFields");
+            var generalFields = document.getElementById("generalFields");
+            var policyFields = document.getElementById("policyFields");
+
+            $('#criminalFields').collapse('hide');
+            $('#generalFields').collapse('hide');
+            $('#policyFields').collapse('hide');
+
+            // Update underline colors based on report type
+            let color;
+            switch (reportType) {
+                case "Criminal":
+                    color = "#FF4500"; // Red for Criminal
+                    $('#criminalFields').collapse('show');
+                    setTimeout(() => {
+                        $('#criminalFields select.form-control').each(function () {
+                            updateSelectWidth(this);
+                        });
+                    }, 10);
+                    break;
+                case "General":
+                    color = "#32CD32"; // Green for General
+                    $('#generalFields').collapse('show');
+                    break;
+                case "Policy Violation":
+                    color = "#2E8BFF"; // Blue for Policy Violation
+                    $('#policyFields').collapse('show');
+                    break;
+                default:
+                    color = "#d1d1d1"; // Default grey
+                    break;
+            }
+
+            // Apply the color to all form-control underlines
+            $('.form-control').css('border-bottom-color', color);
+        }
+
+        function toggleMinorFields() {
+            var suspectType = document.getElementById("IncidentReport_SuspectType").value;
+            $('#minorFields').collapse(suspectType === "Minor" ? 'show' : 'hide');
+        }
+
+        $(document).ready(function () {
+            $('select.form-control').each(function () {
+                updateSelectWidth(this);
+            });
+
+            // Initialize field visibility on page load
+            toggleReportFields();
+            toggleMinorFields();
+
+            // Show validation summary if there are errors
+            if ($('.text-danger').text().trim().length > 0) {
+                $('.alert-danger').removeClass('d-none');
+                $('.text-danger').addClass('active');
+            }
+
+            // Toggle chevron icon on collapse/expand
+            $('.section-header').on('click', function () {
+                $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up');
+            });
+        });
+    </script>
+}

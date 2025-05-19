@@ -1,0 +1,759 @@
+﻿/* General Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f3f3f3;
+    padding-top: 70px; /* Space for fixed navbar */
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1b1b1b;
+    margin-bottom: 20px;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #2C2F33; /* Darker gray */
+}
+
+.navbar-brand.pulse-text {
+    color: #FFFFFF;
+    animation: colorPulse 3s infinite;
+}
+
+@keyframes colorPulse {
+    0% {
+        color: #FFFFFF;
+    }
+
+    50% {
+        color: #00A651;
+    }
+
+    100% {
+        color: #FFFFFF;
+    }
+}
+
+.nav-link {
+    color: #FFFFFF !important;
+    font-weight: 500;
+}
+
+    .nav-link:hover {
+        color: #00A651 !important;
+    }
+
+.dropdown-menu {
+    background-color: #2C2F33;
+}
+
+.dropdown-item {
+    color: #FFFFFF;
+}
+
+    .dropdown-item:hover {
+        background-color: #00A651;
+        color: #FFFFFF;
+    }
+
+.btn-danger {
+    background-color: #FF4040;
+    border-color: #FF4040;
+    color: #FFFFFF;
+}
+
+    .btn-danger:hover {
+        background-color: #E63939;
+        border-color: #E63939;
+    }
+
+/* Success Message */
+.success-message {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    background-color: #00A651;
+    color: #FFFFFF;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 2000;
+    opacity: 1;
+    transition: opacity 1s ease-out;
+}
+
+    .success-message.fade-out {
+        opacity: 0;
+    }
+
+/* Form and Button Styles (from admin.css) */
+.form-group {
+    margin-bottom: 20px;
+    width: 100%; /* Ensure form-group takes full width */
+    min-width: 400px; /* Ensure form-group doesn't shrink below 400px */
+    max-width: none; /* Remove any max-width constraints */
+    overflow: visible; /* Prevent clipping */
+}
+
+    .form-group label {
+        font-weight: 500;
+        color: #1b1b1b;
+    }
+
+    .form-group .form-control {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #d1d1d1;
+        border-radius: 4px;
+        box-shadow: none;
+        border-bottom: 2px solid #d1d1d1; /* Default underline color */
+        transition: border-bottom-color 0.3s ease;
+    }
+
+        .form-group .form-control:focus {
+            border-color: #d1d1d1; /* Keep border consistent on focus */
+            border-bottom-color: #28a745; /* Green underline on focus */
+            outline: none;
+        }
+
+/* Ensure dropdowns take the full width of their container */
+.form-control {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 15px; /* Added padding for better readability */
+}
+
+/* Simplify dropdown styling with higher specificity */
+.form-group select.form-control {
+    width: 100%;
+    min-width: 400px !important; /* Force min-width with higher specificity */
+    padding: 5px 30px 5px 15px; /* Reduced vertical padding to fix text cutoff */
+    box-sizing: border-box; /* Ensure padding is included in width */
+    overflow: visible !important; /* Force visibility of text */
+    text-overflow: unset !important; /* Disable ellipsis */
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+.text-danger {
+    color: #d83b01;
+    font-size: 12px;
+    display: block;
+    margin-top: 5px;
+    background-color: #ffebee; /* Light red background for errors */
+    padding: 5px;
+    border-radius: 3px;
+    display: none; /* Hidden by default, shown only when there are errors */
+}
+
+    .text-danger.active {
+        display: block; /* Show when there are validation errors */
+    }
+
+.btn-primary {
+    background-color: #00A651;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+    .btn-primary:hover {
+        background-color: #008C44;
+    }
+
+/* Card Styles (from dashboard.css) */
+.card {
+    border: 1px solid #dee2e6;
+}
+
+.card-header {
+    background-color: #28a745;
+    color: white;
+}
+
+.card-body {
+    background-color: #fff;
+}
+
+/* Centering Styles for Index, Admin, and IncidentReport */
+.incident-report-card,
+.table-container,
+.dashboard-container {
+    max-width: 1200px; /* Increased from 1000px to give more space */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* CCTVLog Specific Styles */
+.cctv-form-container {
+    max-width: 1100px; /* Increased from 1000px for more breathing room */
+    margin: 0 auto;
+    padding: 30px; /* Increased padding */
+    background-color: #ffffff; /* White background for the form */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow */
+}
+
+    .cctv-form-container h2 {
+        text-align: center;
+        font-weight: bold;
+        color: #1b1b1b;
+        margin-bottom: 30px;
+        font-size: 24px;
+        position: relative; /* For the animated underline */
+    }
+
+        .cctv-form-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%); /* Center the underline */
+            width: 100%;
+            max-width: 200px; /* Limit underline width */
+            height: 2px;
+            background-color: #00A651;
+            animation: wipe 8s ease-in-out infinite;
+        }
+
+@keyframes wipe {
+    0% {
+        transform: translateX(-50%) scaleX(0); /* Start at 0 width */
+        transform-origin: left; /* Grow from left */
+    }
+
+    50% {
+        transform: translateX(-50%) scaleX(1); /* Full width */
+        transform-origin: left; /* Still growing from left */
+    }
+
+    51% {
+        transform: translateX(-50%) scaleX(1); /* Full width */
+        transform-origin: right; /* Now erase from left by shrinking from the right */
+    }
+
+    100% {
+        transform: translateX(-50%) scaleX(0); /* Shrink to 0 width */
+        transform-origin: right; /* Left side moves to the right */
+    }
+}
+
+.header-section {
+    background: linear-gradient(90deg, #2C2F33, #3a3f44); /* Dark gradient */
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    color: #ffffff; /* White text for contrast */
+}
+
+    .header-section .form-group label {
+        font-weight: bold;
+        margin-right: 5px;
+        color: #ffffff;
+    }
+
+    .header-section .form-control {
+        background-color: #ffffff;
+        border: 1px solid #d1d1d1;
+        color: #1b1b1b;
+    }
+
+        .header-section .form-control[readonly] {
+            background-color: #f8f9fa; /* Lighter background for readonly fields */
+        }
+
+.compliance-percentage {
+    font-weight: bold;
+    font-size: 18px; /* Larger font */
+    text-align: right;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+    .compliance-percentage.high {
+        background-color: #e6f4ea; /* Light green for high compliance */
+        color: #28a745;
+    }
+
+    .compliance-percentage.low {
+        background-color: #ffebee; /* Light red for low compliance */
+        color: #d32f2f;
+    }
+
+.form-section {
+    margin-bottom: 40px; /* Increased spacing between sections */
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+}
+
+    .form-section h3 {
+        font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 15px;
+        background-color: #28a745; /* Green background */
+        padding: 12px 20px;
+        border-radius: 5px;
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-section table {
+        border: none; /* Remove default table border */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Softer shadow */
+        border-radius: 5px;
+        overflow: hidden; /* Ensure rounded corners apply to content */
+    }
+
+    .form-section th {
+        background-color: #2C2F33; /* Darker header */
+        color: #ffffff;
+        padding: 12px 15px;
+        font-weight: 600;
+    }
+
+    .form-section td {
+        padding: 12px 15px; /* Increased padding */
+        vertical-align: middle;
+    }
+
+        .form-section td.yes-no {
+            background-color: #e6f4ea; /* Softer green */
+            text-align: center;
+        }
+
+        .form-section td.cro-comments {
+            background-color: #e3f2fd; /* Softer blue */
+        }
+
+        .form-section td.managers-action {
+            background-color: #ffebee; /* Softer red */
+        }
+
+        .form-section td textarea.form-control {
+            min-height: 40px; /* Ensure textareas have enough height */
+            resize: vertical;
+            border-bottom: 2px solid #d1d1d1;
+            transition: border-bottom-color 0.3s ease;
+        }
+
+            .form-section td textarea.form-control:focus {
+                border-bottom-color: #28a745; /* Green underline on focus */
+            }
+
+            .form-section td textarea.form-control[readonly] {
+                background-color: #f8f9fa; /* Lighter background for readonly */
+            }
+
+        /* Custom Checkbox Styling */
+        .form-section td.yes-no input[type="checkbox"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d1d1;
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+        }
+
+            .form-section td.yes-no input[type="checkbox"]:checked {
+                background-color: #28a745;
+                border-color: #28a745;
+            }
+
+                .form-section td.yes-no input[type="checkbox"]:checked::after {
+                    content: '\2713'; /* Checkmark */
+                    color: #ffffff;
+                    font-size: 14px;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+
+            .form-section td.yes-no input[type="checkbox"]:disabled {
+                cursor: not-allowed;
+                opacity: 0.6;
+            }
+
+.notes-section {
+    margin-top: 40px; /* Increased spacing */
+}
+
+    .notes-section .form-group {
+        margin-bottom: 25px;
+    }
+
+        .notes-section .form-group textarea.form-control {
+            min-height: 100px; /* Larger textarea for notes */
+            resize: vertical;
+        }
+
+            .notes-section .form-group textarea.form-control[readonly] {
+                background-color: #f8f9fa; /* Lighter background for readonly */
+            }
+
+.form-buttons {
+    text-align: center;
+    margin-top: 30px;
+}
+
+    .form-buttons .btn {
+        padding: 12px 30px;
+        font-size: 16px;
+        border-radius: 5px;
+        margin: 0 10px;
+        transition: transform 0.2s ease;
+    }
+
+        .form-buttons .btn:hover {
+            transform: scale(1.05); /* Slight scale on hover */
+        }
+
+    .form-buttons .btn-primary {
+        background: linear-gradient(90deg, #28a745, #218838); /* Green gradient */
+    }
+
+        .form-buttons .btn-primary.draft {
+            background: linear-gradient(90deg, #6c757d, #5a6268); /* Gray gradient for draft */
+        }
+
+            .form-buttons .btn-primary.draft:hover {
+                background: linear-gradient(90deg, #5a6268, #4b5259);
+            }
+
+/* IncidentReport Specific Styles */
+.incident-report-card {
+    background-color: #D3D3D3;
+    border: none; /* Remove green border */
+    border-radius: 8px;
+    max-width: 900px; /* Wider card for better spacing */
+    box-shadow: -6px 0 12px rgba(0, 0, 0, 0.1), 0 -6px 12px rgba(0, 0, 0, 0.1); /* Increased shadow size on top and left */
+}
+
+    .incident-report-card .card-body {
+        padding: 30px; /* More padding for breathing room */
+    }
+
+    .incident-report-card .form-group {
+        margin-bottom: 25px; /* Consistent spacing */
+    }
+
+    .incident-report-card .form-label {
+        font-weight: 600;
+        font-size: 14px;
+        color: #1b1b1b;
+    }
+
+    .incident-report-card .form-control {
+        border-radius: 5px;
+        min-height: 38px;
+        resize: vertical; /* Allow textarea resizing vertically */
+        transition: border-bottom-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .incident-report-card .form-control:focus {
+            border-bottom-color: #28a745; /* Green underline on focus */
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Green glow */
+        }
+
+    .incident-report-card .custom-select {
+        min-width: 200px;
+        max-width: 300px; /* Cap dropdown width */
+    }
+
+    .incident-report-card .section-header {
+        background-color: #f8f9fa; /* Light gray background */
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #343a40;
+        cursor: pointer;
+    }
+
+    .incident-report-card .btn-primary {
+        background: linear-gradient(90deg, #28a745, #218838); /* Green gradient */
+        border: none;
+        padding: 12px 30px;
+        font-size: 16px;
+        transition: transform 0.2s ease;
+    }
+
+        .incident-report-card .btn-primary:hover {
+            transform: scale(1.05); /* Slight scale on hover */
+        }
+
+    .incident-report-card .collapse {
+        transition: opacity 0.3s ease-in-out, height 0.3s ease-in-out; /* Smooth transition for collapsing */
+    }
+
+/* Animated Underline for Page Titles */
+h1.h2 {
+    font-size: 24px; /* Match Add New User */
+    position: relative; /* Needed for the underline positioning */
+    display: block; /* Ensure it takes full width for centering */
+    text-align: center; /* Center the text */
+}
+
+    h1.h2::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%); /* Center the underline */
+        width: 100%;
+        max-width: 200px; /* Limit underline width for better aesthetics */
+        height: 2px;
+        background-color: #00A651;
+        animation: wipe 8s ease-in-out infinite; /* Renamed animation for clarity */
+    }
+
+/* Green "Log me in" button */
+.sign-in-button {
+    background-color: #00A651;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .sign-in-button:hover {
+        background-color: #008C44;
+    }
+
+/* Red "Not my branch" button */
+.not-my-branch-button {
+    background-color: #FF4040;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .not-my-branch-button:hover {
+        background-color: #E63939;
+    }
+
+.filter-panel .card-header {
+    background-color: #00A651;
+    cursor: pointer;
+}
+
+    .filter-panel .card-header i {
+        transition: transform 0.3s;
+    }
+
+    .filter-panel .card-header.collapsed i {
+        transform: rotate(180deg);
+    }
+
+/* Card Animations */
+.fade-in {
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Chart Card Headers */
+.card-header {
+    background-color: #2C2F33;
+    color: white;
+}
+
+/* Summary Cards */
+.card.bg-success {
+    background-color: #00A651 !important;
+}
+
+.card.bg-danger {
+    background-color: #FF4040 !important;
+}
+
+/* Table Styles */
+.table th {
+    background-color: #2C2F33;
+    color: white;
+}
+
+.table td {
+    background-color: #fff;
+}
+
+/* Filter Section Styling */
+.filter-section {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: relative;
+}
+
+    /* Filter Header */
+    .filter-section h2 {
+        background-color: #333; /* Dark grey background */
+        color: white; /* White text */
+        padding: 8px;
+        margin: -10px -10px 10px -10px; /* Extend header to edges */
+        font-size: 18px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        cursor: pointer;
+    }
+
+        .filter-section h2 i {
+            transition: transform 0.3s;
+        }
+
+        .filter-section h2.collapsed i {
+            transform: rotate(180deg);
+        }
+
+/* Filter Group (Labels and Inputs) */
+.filter-group {
+    display: inline-block;
+    margin-right: 15px; /* Space between filter groups */
+    margin-bottom: 10px; /* Space below each group */
+    vertical-align: top;
+}
+
+    .filter-group label {
+        display: block; /* Ensure label is on its own line */
+        margin-bottom: 5px; /* Space between label and input */
+    }
+
+.branches-group {
+    margin-right: 0;
+    position: relative; /* For positioning the help text */
+}
+
+/* Wrapper for Branches selector and help text */
+.branches-wrapper {
+    display: flex;
+    align-items: center; /* Vertically center the selector and help text */
+}
+
+/* Make Inputs Smaller */
+.filter-group select,
+.filter-group input[type="date"] {
+    width: 150px; /* Smaller width for inputs */
+    padding: 5px; /* Reduced padding from 10px to 5px */
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+    /* Branches Multi-Select */
+    .filter-group select[multiple] {
+        width: 300px; /* Fixed width to prevent resizing */
+        height: 100px; /* Shorter height */
+        min-width: 300px; /* Ensure it doesn't shrink on small screens */
+        max-width: 300px; /* Ensure it doesn't grow on larger screens */
+    }
+
+/* Help Text Styling */
+.filter-help {
+    margin-left: 15px; /* Space between the selector and help text */
+    flex-shrink: 0; /* Prevent the help text from shrinking */
+}
+
+    .filter-help .help-text {
+        display: block;
+        font-size: 12px;
+        color: #42A5F5; /* Blue color for visibility */
+    }
+
+/* Green Highlight for Focus */
+.filter-group select:focus,
+.filter-group input[type="date"]:focus {
+    border-color: #28a745; /* Green highlight */
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Green glow */
+    outline: none;
+}
+
+/* Apply/Reset Buttons */
+.filter-buttons {
+    margin-top: 10px;
+    text-align: center; /* Center the buttons */
+}
+
+    .filter-buttons button {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .filter-buttons button.apply-btn {
+            background-color: #28a745 !important; /* Green for Apply */
+            color: white !important;
+        }
+
+        .filter-buttons button.reset-btn {
+            background-color: #FF4040 !important; /* Red for Reset */
+            color: white !important;
+        }
+/* Pagination Styles */
+.pagination {
+    margin-top: 20px;
+}
+
+    .pagination .page-item {
+        margin: 0 5px;
+    }
+
+    .pagination .page-link {
+        color: #1b1b1b;
+        background-color: #fff;
+        border: 1px solid #d1d1d1;
+        border-radius: 4px;
+        padding: 8px 12px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #00A651;
+        color: #fff;
+        border-color: #00A651;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #008C44;
+        color: #fff;
+        border-color: #008C44;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+        cursor: not-allowed;
+    }
+
+/* Dashboard Background */
+main {
+    background-image: url('/images/secNET_background_img_dash_C.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

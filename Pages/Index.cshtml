@@ -1,0 +1,403 @@
+﻿@page
+@using Microsoft.AspNetCore.Http
+@model secNET.Pages.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Success Message -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="success-message" id="successMessage">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<!-- Main Content -->
+<main id="main-content">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Dashboard: @(HttpContext.Session.GetString("SelectedBranch") ?? "No Branch Selected")</h1>
+    </div>
+
+    <!-- Filters for Tier 3 -->
+    @if (Model.IsTier3)
+    {
+        <div class="filter-section">
+            <h2 data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="true" aria-controls="filterCollapse">
+                Filters <i class="fas fa-chevron-down float-end"></i>
+            </h2>
+            <div id="filterCollapse" class="collapse show">
+                <form method="post">
+                    <div class="filter-group">
+                        <label>From Date</label>
+                        <input type="date" asp-for="FromDate" />
+                    </div>
+                    <div class="filter-group">
+                        <label>To Date</label>
+                        <input type="date" asp-for="ToDate" />
+                    </div>
+                    <div class="filter-group">
+                        <label>Month 1</label>
+                        <select asp-for="Month1" asp-items="Model.Months"></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Month 2</label>
+                        <select asp-for="Month2" asp-items="Model.Months"></select>
+                    </div>
+                    <div class="filter-group branches-group">
+                        <label>Branches</label>
+                        <div class="branches-wrapper">
+                            <select asp-for="SelectedBranchIds" asp-items="Model.Branches" multiple></select>
+                            <div class="filter-help">
+                                <small class="help-text">Hold Ctrl and select multiple branches to compare</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-buttons">
+                        <button type="submit" asp-page-handler="ApplyFilters" class="apply-btn">Apply Filter</button>
+                        <button type="submit" asp-page-handler="ResetFilters" class="reset-btn">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+
+    <div class="dashboard-container mx-auto">
+        <!-- Charts -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card fade-in">
+                    <div class="card-header">Average Compliance Rate by Branch</div>
+                    <div class="card-body" style="height: 400px;">
+                        <canvas id="complianceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card fade-in">
+                    <div class="card-header">Number of Incidents by Type</div>
+                    <div class="card-body" style="position: relative; height: 400px; padding: 10px;">
+                        <canvas id="incidentsChart" style="max-width: 400px; max-height: 400px; margin: 0 auto;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card fade-in">
+                    <div class="card-header">Top Policy Violations</div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Policy Question</th>
+                                    <th>No Answers</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var violation in Model.TopPolicyViolations)
+                                {
+                                    <tr>
+                                        <td>@violation.Question</td>
+                                        <td>@violation.NoCount</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card fade-in">
+                    <div class="card-header">Incident Severity Index by Branch</div>
+                    <div class="card-body" style="height: 200px;">
+                        <canvas id="severityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card fade-in">
+                    <div class="card-header">CCTV Log Submission Frequency</div>
+                    <div class="card-body" style="height: 200px;">
+                        <canvas id="submissionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card fade-in">
+                    <div class="card-header">Branch Compliance Trend</div>
+                    <div class="card-body" style="height: 200px;">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Fade out success message
+            var successMessage = document.getElementById("successMessage");
+            if (successMessage) {
+                setTimeout(function () {
+                    successMessage.classList.add("fade-out");
+                }, 5000);
+            }
+
+            // Helper function to lighten color for gradients
+            function lightenColor(hex, percent) {
+                hex = hex.replace('#', '');
+                let r = parseInt(hex.substr(0, 2), 16),
+                    g = parseInt(hex.substr(2, 2), 16),
+                    b = parseInt(hex.substr(4, 2), 16);
+                r = Math.min(255, r + (255 - r) * percent);
+                g = Math.min(255, g + (255 - g) * percent);
+                b = Math.min(255, b + (255 - b) * percent);
+                return `#${Math.round(r).toString(16).padStart(2, '0')}${Math.round(g).toString(16).padStart(2, '0')}${Math.round(b).toString(16).padStart(2, '0')}`;
+            }
+
+            // Branch color mapping
+            const branchColors = {
+                "Hardware Swakop": "#043bf7",
+                "Moma": "#ebf704",
+                "Vima": "#04d8f7",
+                "Mondes": "#f77804",
+                "Bakery": "#7d7c7a",
+                "Gofresh": "#36b000",
+                "Baumgart": "#45a5ae",
+                "Walvis Main": "#4568ae",
+                "Naraville": "#fef800",
+                "Seagull": "#dfbb20",
+                "Shoreline": "#a45fe8",
+                "Kuisebmund": "#5c00ff",
+                "Henties Main": "#bd5e00",
+                "Arandis main": "#ff6300",
+                "Eluwa": "#ff2a00",
+                "Oceano": "#6e82ff",
+                "Sauyemwa": "#78ff6e",
+                "Onakali": "#00fda0"
+            };
+
+            // Chart.js Configurations with softer colors
+            const colors = {
+                green: '#66BB6A',
+                red: '#EF5350',
+                blue: '#42A5F5',
+                gray: '#B0BEC5',
+                lightGray: '#E0E0E0'
+            };
+
+            // Metric 1: Average Compliance Rate by Branch
+            const complianceLabels = JSON.parse('@Html.Raw(Model.ComplianceChartLabels)');
+            const complianceData = JSON.parse('@Html.Raw(Model.ComplianceChartData)');
+            const complianceCtx = document.getElementById('complianceChart').getContext('2d');
+            const complianceBackgroundColors = complianceLabels.map(() => {
+                const baseColor = colors.green;
+                const gradient = complianceCtx.createLinearGradient(0, 0, 0, 400);
+                gradient.addColorStop(0, baseColor);
+                gradient.addColorStop(1, lightenColor(baseColor, 0.5));
+                return gradient;
+            });
+            new Chart(document.getElementById('complianceChart'), {
+                type: 'bar',
+                data: {
+                    labels: complianceLabels,
+                    datasets: [{
+                        label: 'Compliance (%)',
+                        data: complianceData,
+                        backgroundColor: complianceBackgroundColors,
+                        borderColor: colors.green,
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        barPercentage: 0.9,
+                        categoryPercentage: 0.8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { stepSize: 20, font: { size: 14 } },
+                            title: { display: true, text: 'Compliance (%)', font: { size: 16 } }
+                        },
+                        x: {
+                            ticks: { font: { size: 12 } },
+                            title: { display: true, text: 'Branches', font: { size: 16 } }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { font: { size: 14 } } },
+                        tooltip: { bodyFont: { size: 14 }, titleFont: { size: 16 } }
+                    },
+                    animation: { duration: 2000, easing: 'easeOutBounce' }
+                }
+            });
+
+            // Metric 2: Number of Incidents (Donut Chart)
+            const incidentLabels = JSON.parse('@Html.Raw(Model.IncidentsChartLabels)');
+            const incidentData = JSON.parse('@Html.Raw(Model.IncidentsChartData)');
+            const totalIncidents = @Model.TotalIncidents;
+
+            const incidentColors = incidentLabels.map(label => {
+                if (label === "Criminal") return '#ff6044';
+                if (label === "General") return '#66BB6A';
+                if (label === "Policy Violation") return '#7ee0ff';
+                return '#B0BEC5';
+            });
+
+            new Chart(document.getElementById('incidentsChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: incidentLabels,
+                    datasets: [{
+                        data: incidentData,
+                        backgroundColor: incidentColors,
+                        borderColor: '#fff',
+                        borderWidth: 2,
+                        cutout: '70%'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 14 },
+                                color: '#666',
+                                padding: 10
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    let value = context.raw || 0;
+                                    return `${label}: ${value}`;
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutQuart'
+                    }
+                },
+                plugins: [{
+                    id: 'totalText',
+                    afterDraw: function(chart) {
+                        const ctx = chart.ctx;
+                        const width = chart.width;
+                        const height = chart.height;
+                        const total = totalIncidents;
+
+                        ctx.restore();
+                        ctx.font = 'bold 1.2rem sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillStyle = '#666';
+                        ctx.fillText('TOTAL INCIDENTS', width / 2, height / 2 - 20);
+                        ctx.font = 'bold 1.8rem sans-serif';
+                        ctx.fillText(total, width / 2, height / 2 + 20);
+                        ctx.save();
+                    }
+                }]
+            });
+
+            // Metric 4: Incident Severity Index (Heatmap-style Bar Chart)
+            const severityLabels = JSON.parse('@Html.Raw(Model.SeverityChartLabels)');
+            const severityData = JSON.parse('@Html.Raw(Model.SeverityChartData)');
+            if (severityLabels.length && severityData.length) {
+                new Chart(document.getElementById('severityChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: severityLabels,
+                        datasets: [{
+                            label: 'Severity Index',
+                            data: severityData,
+                            backgroundColor: severityLabels.map(label => branchColors[label] || colors.gray),
+                            borderColor: colors.gray,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { beginAtZero: true, max: 3, ticks: { stepSize: 1 } }
+                        },
+                        animation: { duration: 1500, easing: 'easeOutQuart' }
+                    }
+                });
+            }
+
+            // Metric 5: CCTV Log Submission Frequency (Line Chart)
+            const submissionLabels = JSON.parse('@Html.Raw(Model.SubmissionChartLabels)');
+            const submissionData = JSON.parse('@Html.Raw(Model.SubmissionChartData)');
+            if (submissionLabels.length && submissionData.length) {
+                new Chart(document.getElementById('submissionChart'), {
+                    type: 'line',
+                    data: {
+                        labels: submissionLabels,
+                        datasets: [{
+                            label: 'Submissions',
+                            data: submissionData,
+                            borderColor: colors.green,
+                            backgroundColor: 'rgba(102, 187, 106, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { type: 'time', time: { unit: 'day' } },
+                            y: { beginAtZero: true }
+                        },
+                        animation: { duration: 1500, easing: 'easeOutQuart' }
+                    }
+                });
+            }
+
+            // Metric 6: Branch Compliance Trend (Line Chart)
+            const trendLabels = JSON.parse('@Html.Raw(Model.TrendChartLabels)');
+            const trendData = JSON.parse('@Html.Raw(Model.TrendChartData)');
+            if (trendLabels.length && trendData.length) {
+                new Chart(document.getElementById('trendChart'), {
+                    type: 'line',
+                    data: {
+                        labels: trendLabels,
+                        datasets: [{
+                            label: 'Compliance (%)',
+                            data: trendData,
+                            borderColor: colors.green,
+                            backgroundColor: 'rgba(102, 187, 106, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { type: 'time', time: { unit: 'month' } },
+                            y: { beginAtZero: true, max: 100 }
+                        },
+                        animation: { duration: 1500, easing: 'easeOutQuart' }
+                    }
+                });
+            }
+        });
+    </script>
+}
