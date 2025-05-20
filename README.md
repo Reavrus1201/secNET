@@ -14,6 +14,9 @@ This is an ASP.NET Razor Pages application for managing security logs, designed 
 - **Search and Filter**: Easily search and filter incidents, users, and CCTV records.
 - **HTML Report Downloads**: Export CCTV logs and incident reports as HTML files for printing or sharing.
 
+## Screenshots
+https://github.com/Reavrus1201/secNET/blob/master/Images/secNET%20dashboard.png
+
 ## Prerequisites
 - **.NET Core 3.0 SDK**: Ensure the .NET Core 3.0 SDK is installed. Download it from [here](https://dotnet.microsoft.com/en-us/download/dotnet/3.0) if needed.
 - **SQL Server**: A SQL Server instance (e.g., LocalDB or a full SQL Server) is required. LocalDB is recommended for development and can be installed with Visual Studio or the SQL Server Express installer.
