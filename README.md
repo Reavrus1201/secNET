@@ -1,6 +1,6 @@
 # secNET
 
-This is an ASP.NET Razor Pages application for managing security logs.
+This is an ASP.NET Razor Pages application for managing security logs, designed for Woermann Brock & Co. Pty. Ltd.
 
 ## Features
 - **CCTV Log Management**: Log and review CCTV footage details.
@@ -12,20 +12,25 @@ This is an ASP.NET Razor Pages application for managing security logs.
 - **CCTV Management**: Admins can create, update, and delete CCTV records.
 - **Audit Logs**: Track changes made to incidents, users, and CCTV records.
 - **Search and Filter**: Easily search and filter incidents, users, and CCTV records.
+- **HTML Report Downloads**: Export CCTV logs and incident reports as HTML files for printing or sharing.
 
 ## Prerequisites
-- **.NET Core 3.0 SDK**: Ensure the .NET Core 3.0 SDK is installed. Download from [here](https://dotnet.microsoft.com/en-us/download/dotnet/3.0).
-- **SQL Server**: A SQL Server instance (e.g., LocalDB or a full SQL Server) is required. LocalDB is recommended for development.
-- **SQL Server Management Studio (SSMS)**: Optional for database setup. Download from [here](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms).
+- **.NET Core 3.0 SDK**: Ensure the .NET Core 3.0 SDK is installed. Download it from [here](https://dotnet.microsoft.com/en-us/download/dotnet/3.0) if needed.
+- **SQL Server**: A SQL Server instance (e.g., LocalDB or a full SQL Server) is required. LocalDB is recommended for development and can be installed with Visual Studio or the SQL Server Express installer.
+- **SQL Server Management Studio (SSMS)**: Optional but recommended for database setup. Download from [here](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms).
+- **Visual Studio 2022**: Recommended for development (or another IDE that supports ASP.NET Core).
 
 ## Setup Instructions
-1. **Clone the Repository**: git clone https://github.com/Reavrus1201/secNET.git
+
+1. **Clone the Repository**:
+   Clone the project from GitHub using the following command:
+git clone https://github.com/yourusername/secNET.git
+cd secNET
 
 2. **Install Dependencies**:
-Install NuGet packages by running: dotnet restore
-Or install individually:
+Install the required NuGet packages by running: "dotnet restore"
+Alternatively, you can install each package individually:
 dotnet add package Isopoh.Cryptography.Argon2 --version 2.0.0
-dotnet add package iTextSharp --version 5.5.13.4
 dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer --version 3.0.0
 dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson --version 3.0.0
 dotnet add package Microsoft.EntityFrameworkCore --version 3.0.0
@@ -36,32 +41,18 @@ dotnet add package Microsoft.VisualStudio.Azure.Containers.Tools.Targets --versi
 
 3. **Set Up Configuration**:
 - The project requires a database connection string and a JWT secret key.
-- Open `appsettings.json` and `appsettings.Development.json` and update:
-  - `ConnectionStrings:DefaultConnection`: Replace with your database connection string (e.g., provided in email).
-  - `JwtSettings:SecretKey`: Replace with your JWT secret key (must be at least 32 characters long, provided in email).
-- Alternatively, set as environment variables:
-  - `ConnectionStrings__DefaultConnection`
-  - `JwtSettings__SecretKey`
+- Open `appsettings.json` and `appsettings.Development.json` and update the following values:
+  - `ConnectionStrings:DefaultConnection`: Replace with your database connection string (provided via email by your administrator).
+  - `JwtSettings:SecretKey`: Replace with your JWT secret key (must be at least 32 characters long, provided via email by your administrator).
+- If you don’t have these values, contact your project administrator for the email containing the credentials.
 
 4. **Create the Database**:
 - Open SQL Server Management Studio (SSMS).
-- Connect to your SQL Server instance.
-- Right-click "Databases" and select "Restore Database".
-- Choose the `.bak` file provided in email.
-- Follow the prompts to restore the database.
+- Connect to your SQL Server instance (e.g., `(localdb)\MSSQLLocalDB` or `DESKTOP-9HBIT6M\SQLEXPRESS` if previously set up).
+- Right-click on the "Databases" node and select "Restore Database".
+- Choose the `.bak` file (provided via email by your administrator).
+- Follow the prompts to restore the database, ensuring the database name matches `secNET`.
+- Note: Ensure your SQL Server version is compatible with the backup file (SQL Server 2019 or later recommended).
 
 5. **Run the Application**:
-Open in Visual Studio and run, or use the command line: dotnet run
-
-## Notes
-- Ensure SQL Server LocalDB is installed if using the default connection string.
-- The JWT secret key must match the one used in your authentication setup.
-- A SQL Server instance (e.g., LocalDB or a full SQL Server) is required.
-- If you don’t have the connection string or JWT key, contact the project admin.
-
-## Contributing
-- Fork the repository.
-- Create a new branch (`git checkout -b feature/your-feature`).
-- Commit your changes (`git commit -m 'Add your feature'`).
-- Push to the branch (`git push origin feature/your-feature`).
-- Open a Pull Request on GitHub.
+Open the solution in Visual Studio 2022 and press `F5` to run, or use the command line: "dotnet run"
