@@ -1,0 +1,276 @@
+@page
+@model secNET.Pages.CCTVLogModel
+@{
+    ViewData["Title"] = "CCTV Log";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - secNET</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        function updateSelectWidth(selectElement) {
+            const tempSpan = document.createElement('span');
+            tempSpan.style.visibility = 'hidden';
+            tempSpan.style.position = 'absolute';
+            tempSpan.style.whiteSpace = 'nowrap';
+            tempSpan.style.display = 'inline-block';
+
+            const computedStyle = window.getComputedStyle(selectElement);
+            tempSpan.style.fontFamily = computedStyle.fontFamily;
+            tempSpan.style.fontSize = computedStyle.fontSize;
+            tempSpan.style.fontWeight = computedStyle.fontWeight;
+            tempSpan.style.fontStyle = computedStyle.fontStyle;
+            tempSpan.style.letterSpacing = computedStyle.letterSpacing;
+
+            let maxWidth = 0;
+            Array.from(selectElement.options).forEach(option => {
+                tempSpan.textContent = option.text;
+                selectElement.parentNode.appendChild(tempSpan);
+                const width = tempSpan.offsetWidth;
+                maxWidth = Math.max(maxWidth, width);
+                selectElement.parentNode.removeChild(tempSpan);
+            });
+
+            const extraPadding = 60;
+            selectElement.style.width = `${maxWidth + extraPadding}px`;
+        }
+
+        function updateCompliancePercentage() {
+            const totalQuestions = $('.compliance-radio').length / 2; // Two radios per question
+            const checkedYes = $('.compliance-radio[value="Yes"]:checked').length;
+            const percentage = (checkedYes / totalQuestions) * 100;
+            const percentageElement = $('#compliance-percentage');
+            percentageElement.text(`${percentage.toFixed(2)}%`);
+            if (percentage >= 75) {
+                percentageElement.removeClass('low').addClass('high');
+            } else {
+                percentageElement.removeClass('high').addClass('low');
+            }
+        }
+
+        $(document).ready(function () {
+            $('select.form-control').each(function () {
+                updateSelectWidth(this);
+            });
+            updateCompliancePercentage();
+            $('.compliance-radio').on('change', function () {
+                updateCompliancePercentage();
+            });
+        });
+    </script>
+    <style>
+        .table th, .table td {
+            vertical-align: middle;
+            padding: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-section td.yes-no input[type="radio"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #666;
+            border-radius: 50%;
+            position: relative;
+            cursor: pointer;
+            margin: 0 8px 0 2px;
+            vertical-align: middle;
+            transition: transform 0.2s ease, border-color 0.3s ease;
+        }
+
+            /* Hover effect for Yes */
+            .form-section td.yes-no input[type="radio"][value="Yes"]:hover {
+                transform: scale(1.1);
+                border-color: #28a745;
+            }
+
+            /* Hover effect for No */
+            .form-section td.yes-no input[type="radio"][value="No"]:hover {
+                transform: scale(1.1);
+                border-color: #FF4040;
+            }
+
+            /* Checked state for Yes */
+            .form-section td.yes-no input[type="radio"][value="Yes"]:checked {
+                background-color: #28a745;
+                border-color: #28a745;
+            }
+
+            /* Checked state for No */
+            .form-section td.yes-no input[type="radio"][value="No"]:checked {
+                background-color: #FF4040;
+                border-color: #FF4040;
+            }
+
+            /* Checkmark for both Yes and No */
+            .form-section td.yes-no input[type="radio"]:checked::after {
+                content: '\2713'; /* Unicode for checkmark */
+                color: #ffffff;
+                font-size: 16px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+        .form-section td.yes-no label {
+            vertical-align: middle;
+        }
+
+        /* Custom style for disabled/greyed out fields */
+        .disabled-field {
+            background-color: #f8f9fa !important;
+            border-bottom: 2px solid #d1d1d1 !important;
+            cursor: not-allowed !important;
+        }
+    </style>
+</head>
+<body>
+    <main id="main-content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">CCTV Log</h1>
+        </div>
+
+        <div class="cctv-form-container">
+            <h2>DAILY CCTV MONITORING LOG - CAMERA ROOM OPERATOR</h2>
+            <form method="post" asp-page-handler="SubmitLog">
+                <div class="header-section">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <div class="form-group">
+                                <label asp-for="CCTVLog.BranchId">Store Name:</label>
+                                @if (ViewData["IsSuperUser"] != null && (bool)ViewData["IsSuperUser"])
+                                {
+                                    <select asp-for="CCTVLog.BranchId" asp-items="@Model.Branches" class="form-control"></select>
+                                }
+                                else
+                                {
+                                    <select asp-for="CCTVLog.BranchId" asp-items="@Model.Branches" class="form-control" disabled="disabled"></select>
+                                    <input type="hidden" asp-for="CCTVLog.BranchId" />
+                                }
+                                <span asp-validation-for="CCTVLog.BranchId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label asp-for="CCTVLog.OperatorName">Operator Name:</label>
+                            <input asp-for="CCTVLog.OperatorName" type="text" class="form-control" />
+                            <span asp-validation-for="CCTVLog.OperatorName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label asp-for="CCTVLog.Date">Date:</label>
+                            <input asp-for="CCTVLog.Date" type="date" class="form-control" />
+                            <span asp-validation-for="CCTVLog.Date" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label asp-for="CCTVLog.ShiftType">Shift Type:</label>
+                            <select asp-for="CCTVLog.ShiftType" class="form-control">
+                                <option value="Morning">Morning</option>
+                                <option value="Late">Late</option>
+                            </select>
+                            <span asp-validation-for="CCTVLog.ShiftType" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="compliance-percentage @(Model.CCTVLog != null && Model.CCTVLog.CompliancePercentage >= 75 ? "high" : "low")" id="compliance-percentage">
+                                @(Model.CCTVLog != null ? $"{Model.CCTVLog.CompliancePercentage:F2}%" : "0.00%")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.CCTVLog?.Sections != null)
+                {
+                    @for (int i = 0; i < Model.CCTVLog.Sections.Count; i++)
+                    {
+                        var logSection = Model.CCTVLog.Sections.ElementAt(i);
+                        if (logSection.Value?.Questions != null)
+                        {
+                            <div class="form-section">
+                                <h3>@logSection.Key</h3>
+                                <input type="hidden" name="SectionKeys[@i]" value="@logSection.Key" />
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Procedure / Policy</th>
+                                            <th>Yes / No</th>
+                                            <th>CRO Comments</th>
+                                            <th>Managers & Supervisors Action Taken</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int j = 0; j < logSection.Value.Questions.Count; j++)
+                                        {
+                                            var question = logSection.Value.Questions.ElementAt(j);
+                                            <tr>
+                                                <td>@question.Key</td>
+                                                <td class="yes-no">
+                                                    <input type="hidden" name="QuestionKeys[@i][@j]" value="@question.Key" data-section="@logSection.Key" />
+                                                    <label><input type="radio" name="QuestionValues[@i][@j]" value="Yes" class="compliance-radio" @(question.Value == "Yes" ? "checked" : "") /> Yes</label>
+                                                    <label><input type="radio" name="QuestionValues[@i][@j]" value="No" class="compliance-radio" @(question.Value == "No" ? "checked" : "") /> No</label>
+                                                </td>
+                                                <td class="cro-comments">
+                                                    <textarea name="CROComments[@i][@j]" rows="2" class="form-control" data-section="@logSection.Key" data-question="@question.Key">@(logSection.Value.CROComments != null && logSection.Value.CROComments.ContainsKey(question.Key) ? logSection.Value.CROComments[question.Key] : "")</textarea>
+                                                </td>
+                                                <td class="managers-action">
+                                                    <textarea name="ManagersActionTaken[@i][@j]" rows="2" class="form-control disabled-field" disabled data-section="@logSection.Key" data-question="@question.Key">@(logSection.Value.ManagersActionTaken != null && logSection.Value.ManagersActionTaken.ContainsKey(question.Key) ? logSection.Value.ManagersActionTaken[question.Key] : "")</textarea>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                }
+                else
+                {
+                    <p>No sections available to display.</p>
+                }
+
+                <div class="notes-section">
+                    <div class="form-group">
+                        <label>Operator Notes:</label>
+                        <textarea asp-for="CCTVLog.Comments" rows="5" class="form-control">@(Model.CCTVLog?.Comments ?? "")</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Branch Manager Notes:</label>
+                        <textarea asp-for="CCTVLog.BranchManagerNotes" rows="5" class="form-control disabled-field" disabled>@(Model.CCTVLog?.BranchManagerNotes ?? "")</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Report Seen By (Insert name, surname):</label>
+                        <input asp-for="CCTVLog.ReportSeenBy" type="text" class="form-control disabled-field" disabled value="@(Model.CCTVLog?.ReportSeenBy ?? "")" />
+                    </div>
+                    <div class="form-group">
+                        <label>Branch Manager:</label>
+                        <input asp-for="CCTVLog.BranchManager" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="CCTVLog.ReportSeenBy" type="hidden" />
+                    </div>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">Submit Log</button>
+                    <div class="form-help">
+                        <span class="help-text">Submissions are final. Verify all data before submitting.</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

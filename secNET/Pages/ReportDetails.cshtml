@@ -1,0 +1,92 @@
+﻿@page
+@model secNET.Pages.ReportDetailsModel
+@{
+    ViewData["Title"] = "Report Details";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - secNET</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/admin.css" />
+</head>
+<body>
+    <main id="main-content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Report Details</h1>
+        </div>
+
+        <div class="report-details-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <a href="/ReportExplorer" class="btn btn-secondary report-details-back-button">Back to Report Explorer</a>
+                <a asp-page="/ReportDetails" asp-route-reportType="@Model.ReportType" asp-route-id="@(Model.ReportType == "CCTVLogs" ? Model.CCTVLog.Id : Model.IncidentReport.Id)" asp-page-handler="DownloadHtml" class="btn btn-primary report-details-back-button">Download HTML</a>
+            </div>
+
+            @if (Model.ReportType == "CCTVLogs" && Model.CCTVLog != null)
+            {
+                <h3>CCTV Log Details</h3>
+                <p><strong>ID:</strong> @Model.CCTVLog.Id</p>
+                <p><strong>Branch:</strong> @Model.BranchName</p>
+                <p><strong>Date:</strong> @Model.CCTVLog.Date.ToString("yyyy-MM-dd")</p>
+                <p><strong>Operator Name:</strong> @Model.CCTVLog.OperatorName</p>
+                <p><strong>Shift Type:</strong> @Model.CCTVLog.ShiftType</p>
+                <p><strong>Status:</strong> @Model.CCTVLog.Status</p>
+                <p><strong>Compliance Percentage:</strong> @Model.CCTVLog.CompliancePercentage%</p>
+                <p><strong>Comments:</strong> @Model.CCTVLog.Comments</p>
+                <p><strong>Branch Manager Notes:</strong> @Model.CCTVLog.BranchManagerNotes</p>
+                <p><strong>Report Seen By:</strong> @Model.CCTVLog.ReportSeenBy</p>
+                <p><strong>Branch Manager:</strong> @Model.CCTVLog.BranchManager</p>
+                <p><strong>Date of Report Seen:</strong> @(Model.CCTVLog.DateOfReportSeen?.ToString("yyyy-MM-dd") ?? "Not seen")</p>
+                <p><strong>Submitted By ID:</strong> @Model.CCTVLog.SubmittedById</p>
+                <p><strong>Reviewed By ID:</strong> @(Model.CCTVLog.ReviewedById?.ToString() ?? "Not reviewed")</p>
+
+                @if (Model.ChecklistData != null && Model.ChecklistData.Any())
+                {
+                    <h3>Checklist Details</h3>
+                    @foreach (var category in Model.ChecklistData)
+                    {
+                        <div class="checklist-section">
+                            <h4>@category.Key</h4>
+                            @foreach (var question in category.Value.Questions)
+                            {
+                                <div class="checklist-item">
+                                    <p><strong>Question:</strong> @question.Key</p>
+                                    <p>
+                                        <strong>Answer:</strong>
+                                        <span class="@(question.Value == "Yes" ? "answer-yes" : "answer-no")">@question.Value</span>
+                                    </p>
+                                    @if (category.Value.CROComments.ContainsKey(question.Key) && !string.IsNullOrEmpty(category.Value.CROComments[question.Key]))
+                                    {
+                                        <p class="comment"><strong>CRO Comment:</strong> @category.Value.CROComments[question.Key]</p>
+                                    }
+                                    @if (category.Value.ManagersActionTaken.ContainsKey(question.Key) && !string.IsNullOrEmpty(category.Value.ManagersActionTaken[question.Key]))
+                                    {
+                                        <p class="action"><strong>Manager's Action Taken:</strong> @category.Value.ManagersActionTaken[question.Key]</p>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+            }
+            else if (Model.ReportType == "IncidentReports" && Model.IncidentReport != null)
+            {
+                <h3>Incident Report Details</h3>
+                <p><strong>ID:</strong> @Model.IncidentReport.Id</p>
+                <p><strong>Branch:</strong> @Model.BranchName</p>
+                <p><strong>Incident DateTime:</strong> @Model.IncidentReport.IncidentDateTime.ToString("yyyy-MM-dd HH:mm")</p>
+                <p><strong>Type:</strong> @Model.IncidentReport.Type</p>
+                <p><strong>Fields Data:</strong> @Model.IncidentReport.FieldsData</p>
+                <p><strong>Created By ID:</strong> @Model.IncidentReport.CreatedById</p>
+            }
+            else
+            {
+                <p>Report not found.</p>
+            }
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,177 @@
+﻿@page
+@model secNET.Pages.ReportExplorerModel
+@{
+    ViewData["Title"] = "Report Explorer";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - secNET</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/admin.css" />
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr.clickable-row {
+            cursor: pointer;
+        }
+
+            tr.clickable-row:hover {
+                background-color: #f5f5f5;
+            }
+    </style>
+</head>
+<body>
+    <main id="main-content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Report Explorer</h1>
+        </div>
+
+        <div class="cctv-form-container">
+            <h2>Report Explorer</h2>
+            <form method="post" id="reportForm">
+                <div class="form-group">
+                    <label for="reportType">Select Report Type:</label>
+                    @if (string.IsNullOrEmpty(Model.ReportType))
+                    {
+                        <select id="reportType" name="reportType" class="form-control" asp-items="Model.ReportTypeOptions" onchange="this.form.submit()">
+                            <option value="">-- Select a Report Type --</option>
+                        </select>
+                    }
+                    else
+                    {
+                        <input type="hidden" name="reportType" value="@Model.ReportType" />
+                        <p><strong>Selected Report Type:</strong> @(Model.ReportType == "CCTVLogs" ? "CCTV Logs" : "Incident Reports")</p>
+                        <button type="submit" class="btn btn-secondary" name="resetReportType" value="true">Select a New Report Type</button>
+                    }
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ReportType))
+                {
+                    <div class="form-group">
+                        <label for="dateRange">Date Range:</label>
+                        <select id="dateRange" name="dateRange" class="form-control">
+                            <option value="All">All</option>
+                            <option value="2025-05">May 2025</option>
+                        </select>
+                    </div>
+
+                    @if (Model.IsTier3)
+                    {
+                        <div class="form-group">
+                            <label for="branchId">Branch:</label>
+                            <select id="branchId" name="branchId" class="form-control" asp-items="Model.BranchOptions">
+                                <option value="">-- All Branches --</option>
+                            </select>
+                        </div>
+                    }
+                    else
+                    {
+                        <input type="hidden" name="branchId" value="@Model.UserBranchId" />
+                    }
+
+                    @if (Model.ReportType == "CCTVLogs" && Model.IsTier3)
+                    {
+                        <div class="form-group">
+                            <label for="status">Status:</label>
+                            <select id="status" name="status" class="form-control">
+                                <option value="">-- All Statuses --</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Final">Final</option>
+                            </select>
+                        </div>
+                    }
+
+                    <button type="submit" class="btn btn-primary" name="search" value="true">Search</button>
+                }
+            </form>
+
+            <!-- Display Results -->
+            @if (!string.IsNullOrEmpty(Model.Search) && !string.IsNullOrEmpty(Model.ReportType))
+            {
+                if (Model.ReportType == "CCTVLogs" && Model.CCTVLogs != null && Model.CCTVLogs.Any())
+                {
+                    <h3>CCTV Logs</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Branch</th>
+                                <th>Date</th>
+                                <th>Operator</th>
+                                <th>Shift Type</th>
+                                <th>Status</th>
+                                <th>Compliance %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var log in Model.CCTVLogs)
+                            {
+                                var branchName = Model.BranchNames.ContainsKey(log.BranchId) ? Model.BranchNames[log.BranchId] : "Unknown";
+                                <tr class="clickable-row" onclick="window.location='/ReportDetails?reportType=CCTVLogs&id=@log.Id'">
+                                    <td>@log.Id</td>
+                                    <td>@branchName</td>
+                                    <td>@log.Date.ToString("yyyy-MM-dd")</td>
+                                    <td>@log.OperatorName</td>
+                                    <td>@log.ShiftType</td>
+                                    <td>@log.Status</td>
+                                    <td>@log.CompliancePercentage%</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else if (Model.ReportType == "IncidentReports" && Model.IncidentReports != null && Model.IncidentReports.Any())
+                {
+                    <h3>Incident Reports</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Branch</th>
+                                <th>Incident DateTime</th>
+                                <th>Type</th>
+                                <th>Fields Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var report in Model.IncidentReports)
+                            {
+                                var branchName = Model.BranchNames.ContainsKey(report.BranchId) ? Model.BranchNames[report.BranchId] : "Unknown";
+                                <tr class="clickable-row" onclick="window.location='/ReportDetails?reportType=IncidentReports&id=@report.Id'">
+                                    <td>@report.Id</td>
+                                    <td>@branchName</td>
+                                    <td>@report.IncidentDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td>@report.Type</td>
+                                    <td>@report.FieldsData</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>No results found for the selected filters.</p>
+                }
+            }
+        </div>
+    </main>
+</body>
+</html>

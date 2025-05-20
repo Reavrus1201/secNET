@@ -1,0 +1,45 @@
+﻿@page
+@model secNET.Pages.Admin.AddUserModel
+@{
+    ViewData["Title"] = "Admin - Add User";
+}
+
+<h1 class="h2">Add New User</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Input.Username"></label>
+        <input asp-for="Input.Username" class="form-control" />
+        <span asp-validation-for="Input.Username" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.Password"></label>
+        <input asp-for="Input.Password" class="form-control" />
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.TierLevel"></label>
+        <select asp-for="Input.TierLevel" asp-items="Model.TierLevels" class="form-control">
+            <option value="">Select a tier level</option>
+        </select>
+        <span asp-validation-for="Input.TierLevel" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.BranchId"></label>
+        <select asp-for="Input.BranchId" asp-items="Model.Branches" class="form-control">
+            <option value="">Select a branch</option>
+        </select>
+        <span asp-validation-for="Input.BranchId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add User</button>
+    <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

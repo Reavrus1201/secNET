@@ -1,0 +1,87 @@
+﻿@page
+@model secNET.Pages.LoginModel
+@{
+    ViewData["Title"] = "secNET Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - secNET</title>
+    <link rel="stylesheet" href="/css/login.css?v=8" />
+    <link rel="stylesheet" href="/css/site.css?v=8" /> <!-- Added site.css reference -->
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-panel">
+            <img src="/images/logo_secnet.webp" alt="secNET Logo" class="logo" />
+
+            @if (Model.ShowBranchVerification)
+            {
+                <h1>Verify Your Branch</h1>
+                <form method="post" asp-page-handler="VerifyBranch">
+                    <div class="form-group">
+                        <select class="form-control" disabled>
+                            <option>@Model.AssignedBranchName</option>
+                        </select>
+                    </div>
+                    <p class="support-text">Is this your current branch?</p>
+                    <div class="button-group">
+                        <button type="submit" name="action" value="LogMeIn" class="sign-in-button">Log me in</button>
+                        <button type="submit" name="action" value="NotMyBranch" class="not-my-branch-button">Not my branch</button>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.BranchVerificationMessage))
+                    {
+                        <div class="error-message">@Model.BranchVerificationMessage</div>
+                    }
+                </form>
+            }
+            else if (Model.ShowPasswordStep)
+            {
+                <h1>Enter password</h1>
+                <form method="post" asp-page-handler="Login">
+                    <input type="hidden" asp-for="Input.Username" />
+                    <div class="username-display">@Model.Input.Username</div>
+                    <div class="form-group">
+                        <input asp-for="Input.Password" type="password" placeholder="Password" />
+                        <span asp-validation-for="Input.Password" class="validation-message"></span>
+                    </div>
+                    <p class="support-text">Contact Admin for any account issues</p>
+                    <div class="button-group">
+                        <button type="button" class="back-button" onclick="history.back()">Back</button>
+                        <button type="submit" class="sign-in-button">Sign in</button>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <h1>Sign in</h1>
+                <form method="post" asp-page-handler="Username">
+                    <div class="form-group">
+                        <input asp-for="Input.Username" placeholder="Username" />
+                        <span asp-validation-for="Input.Username" class="validation-message"></span>
+                    </div>
+                    <p class="support-text">Contact Admin for any account issues</p>
+                    <div class="button-group">
+                        <button type="submit" class="next-button">Next</button>
+                    </div>
+                </form>
+            }
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="error-message">
+                    @ViewData.ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage
+                </div>
+            }
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

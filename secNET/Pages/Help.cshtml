@@ -1,0 +1,285 @@
+﻿@page
+@model secNET.Pages.HelpModel
+@{
+    ViewData["Title"] = "Help";
+}
+
+<style>
+    /* Custom styles for the Help page */
+    .help-section {
+        margin-top: 30px;
+        padding: 15px;
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+        .help-section h2 {
+            margin-bottom: 15px;
+            color: #2980b9;
+            font-size: 22px;
+            border-left: 4px solid #00A651;
+            padding-left: 10px;
+            position: relative;
+        }
+
+            .help-section h2 i {
+                margin-right: 8px;
+                color: #00A651;
+            }
+
+        .help-section h3 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .help-section p, .help-section li {
+            font-size: 16px;
+            color: #34495e;
+            line-height: 1.6;
+            margin: 8px 0;
+        }
+
+    .important-notes {
+        background-color: #e6f4ea;
+        padding: 10px;
+        border-radius: 5px;
+        color: #28a745;
+    }
+
+    .faq-answer {
+        margin-left: 20px;
+    }
+
+    .support-button {
+        margin-top: 15px;
+    }
+
+    /* Table of Contents Styles */
+    .toc-card {
+        margin-bottom: 30px;
+    }
+
+        .toc-card .card-body {
+            padding: 15px;
+        }
+
+        .toc-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc-card li {
+            margin: 8px 0;
+        }
+
+        .toc-card a {
+            color: #005A9E;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+            .toc-card a:hover {
+                color: #00A651;
+                text-decoration: underline;
+            }
+</style>
+
+<main id="main-content" style="background-image: url('/images/secNET_background_img_dash_C.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Help</h1>
+    </div>
+
+    <!-- Table of Contents -->
+    <div class="card toc-card fade-in">
+        <div class="card-header">Table of Contents</div>
+        <div class="card-body">
+            <ul>
+                <li><a href="#introduction-to-secnet" class="colorPulse" aria-label="Jump to Introduction to secNET">1. Introduction to secNET</a></li>
+                <li><a href="#cro-instructions" class="colorPulse" aria-label="Jump to CRO Instructions and Procedures">2. CRO Instructions and Procedures</a></li>
+                <li><a href="#managers-instructions" class="colorPulse" aria-label="Jump to Managers/Supervisors Instructions and Procedures">3. Managers/Supervisors Instructions and Procedures</a></li>
+                <li><a href="#admin-instructions" class="colorPulse" aria-label="Jump to Admin Instructions and Procedures">4. Admin Instructions and Procedures</a></li>
+                <li><a href="#features" class="colorPulse" aria-label="Jump to Features">5. Features</a></li>
+                <li><a href="#support-contacts" class="colorPulse" aria-label="Jump to Support Contacts">6. Support Contacts</a></li>
+                <li><a href="#faqs" class="colorPulse" aria-label="Jump to Frequently Asked Questions">7. Frequently Asked Questions (FAQs)</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card fade-in">
+        <div class="card-header">Help Page for secNET</div>
+        <div class="card-body">
+            <div class="help-section" id="introduction-to-secnet">
+                <h2><i class="fas fa-book"></i> 1. Introduction to secNET</h2>
+                <p>
+                    secNET is a security management application designed to help Control Room Operators (CROs) monitor staff compliance with company policies, rules, health and safety procedures, and regulations using a checklist system. Managers/Supervisors review these checklists, while Admins manage users and system settings. The application supports efficient oversight and reporting across branches for Woermann Brock & Co. Pty. Ltd.
+                </p>
+            </div>
+
+            <div class="help-section" id="cro-instructions">
+                <h2><i class="fas fa-video"></i> 2. CRO Instructions and Procedures</h2>
+                <p>CROs are responsible for monitoring staff via the CCTV system and completing compliance checklists during their shifts. Follow these steps:</p>
+                <h3>Logging In</h3>
+                <ul>
+                    <li>Open secNET in your browser.</li>
+                    <li>Enter your username and password.</li>
+                    <li>If assigned to a specific branch, select your branch during login.</li>
+                </ul>
+                <h3>Completing the CCTVLog Checklist</h3>
+                <ol>
+                    <li>From the main dashboard, click "Application" on the top navigation bar and click "CCTVLog" in the dropdown.</li>
+                    <li>Enter your name and surname.</li>
+                    <li>Select the date of your shift.</li>
+                    <li>Choose the shift type (e.g., morning, afternoon, night).</li>
+                    <li>Complete the checklist during your shift, answering questions related to company code of conduct, rules, health, and safety procedures.</li>
+                    <li>At the end of your shift, click Submit Checklist.</li>
+                </ol>
+                <p class="important-notes"><strong>Important Notes:</strong></p>
+                <ul class="important-notes">
+                    <li>For any question answered "No," provide a comment including who, what, when, and where.</li>
+                    <li>Only one submission is allowed per CRO per shift (maximum 2 reports per branch per day).</li>
+                    <li>Use the Operator Notes field to add additional or critical information.</li>
+                    <li>Contact the on-duty supervisor immediately if you encounter technical issues.</li>
+                    <li>Report major or serious misconduct or incidents to your supervisor immediately—do not wait until the end of your shift.</li>
+                </ul>
+            </div>
+
+            <div class="help-section" id="managers-instructions">
+                <h2><i class="fas fa-users-cog"></i> 3. Managers/Supervisors Instructions and Procedures</h2>
+                <p>Managers and Supervisors review submitted CCTVLog checklists, ensuring compliance and taking action where needed. Follow these steps:</p>
+                <h3>Logging In</h3>
+                <ul>
+                    <li>Follow the same login steps as CROs.</li>
+                    <li>If you manage multiple branches, you may have broader access depending on your role (Tier 2 or Tier 3).</li>
+                </ul>
+                <h3>Reviewing CCTVLog Checklists</h3>
+                <ol>
+                    <li>From the main dashboard, click "Application" on the top navigation bar and click "Review CCTVLogs" in the dropdown.</li>
+                    <li>Select the branch to review (available to Admins only for branch selection).</li>
+                    <li>Choose a submitted CCTVLog to review.</li>
+                    <li>Provide action taken details in the designated fields for any question answered "No."</li>
+                    <li>Enter your name and surname at the bottom of the page.</li>
+                    <li>Select the date of submission.</li>
+                    <li>Click Submit Review.</li>
+                </ol>
+                <p class="important-notes"><strong>Important Notes:</strong></p>
+                <ul class="important-notes">
+                    <li>For any "No" answer, the action taken must include who, what, when, and where.</li>
+                    <li>All reviews must be completed daily to ensure accurate data, avoid backlogs, and maintain workflow.</li>
+                    <li>Contact the on-duty Admin immediately if you experience technical issues.</li>
+                </ul>
+                <h3>Managing Incident Reports</h3>
+                <ol>
+                    <li>From the main dashboard, click "Application" on the top navigation bar and click "Report Explorer" in the dropdown.</li>
+                    <li>Filter reports by date, type, or status.</li>
+                    <li>Review details and take action (e.g., assign to a team member or close the report).</li>
+                </ol>
+                <h3>Generating Reports</h3>
+                <ol>
+                    <li>In Report Explorer, select filters (e.g., date range, branch).</li>
+                    <li>Choose a report type (e.g., compliance summary, incident report).</li>
+                    <li>Click Generate and export the report in HTML format.</li>
+                </ol>
+            </div>
+
+            <div class="help-section" id="admin-instructions">
+                <h2><i class="fas fa-user-shield"></i> 4. Admin Instructions and Procedures</h2>
+                <p>Admins (Tier 3 users) manage the system and users. Here’s how to perform your key tasks:</p>
+                <h3>Logging In</h3>
+                <ul>
+                    <li>Log in with your admin credentials. You’ll have full access to all branches and settings.</li>
+                </ul>
+                <h3>User Management</h3>
+                <ol>
+                    <li>Go to the Admin page (in navigation bar on top of page).</li>
+                    <li>
+                        To add a user:
+                        <ul>
+                            <li>Click Add User, enter their details, and assign a role (Tier 1: CRO, Tier 2: Manager/Supervisor, Tier 3: Admin).</li>
+                            <li>Assign branch(es) if applicable.</li>
+                        </ul>
+                    </li>
+                    <li>To edit or remove a user, select their profile and update or delete as needed.</li>
+                </ol>
+                <h3>System Configuration</h3>
+                <ol>
+                    <li>On the Admin page, access Settings.</li>
+                    <li>Adjust system-wide options (e.g., log retention period, notification settings).</li>
+                    <li>Save changes to apply them across all branches.</li>
+                </ol>
+                <h3>Monitoring and Auditing</h3>
+                <ol>
+                    <li>Use Report Explorer to view audit logs.</li>
+                    <li>Track changes to users, logs, or incidents for security oversight.</li>
+                </ol>
+            </div>
+
+            <div class="help-section" id="features">
+                <h2><i class="fas fa-tools"></i> 5. Features</h2>
+                <p>This section explains secNET’s key features and how they benefit users.</p>
+                <h3>CCTVLog</h3>
+                <ul>
+                    <li><strong class="checklist-item p strong">What it does:</strong> Enables CROs to monitor staff compliance with company policies, rules, and safety procedures using a checklist.</li>
+                    <li><strong class="checklist-item p strong">How to use it:</strong> Enter your name, select date and shift type, complete the checklist during your shift, and submit at the end.</li>
+                    <li><strong class="checklist-item p strong">Benefit:</strong> Ensures consistent monitoring and documentation of staff adherence to standards.</li>
+                </ul>
+                <h3>Incident Report Creator</h3>
+                <ul>
+                    <li><strong class="checklist-item p strong">What it does:</strong> Allows users to document "General", "Criminal", and "Policy Violation" incidents.</li>
+                    <li><strong class="checklist-item p strong">How to use it:</strong> Input incident details then submit. Data will be captured in the database and report copy will be created in the "Documents" folder.</li>
+                    <li><strong class="checklist-item p strong">Benefit:</strong> Standardizes incident reporting and tracks resolution.</li>
+                </ul>
+                <h3>Review CCTVLogs</h3>
+                <ul>
+                    <li><strong class="checklist-item p strong">What it does:</strong> Allows Managers/Supervisors to review and approve CCTVLog checklists.</li>
+                    <li><strong class="checklist-item p strong">How to use it:</strong> Select a branch (Admin privilege), review submissions, add action taken for "No" answers, and submit.</li>
+                    <li><strong class="checklist-item p strong">Benefit:</strong> Maintains oversight and ensures corrective actions are documented.</li>
+                </ul>
+                <h3>Report Explorer</h3>
+                <ul>
+                    <li><strong class="checklist-item p strong">What it does:</strong> Provides search, filter, and report generation tools.</li>
+                    <li><strong class="checklist-item p strong">How to use it:</strong> Search logs or incidents, apply filters, and export reports.</li>
+                    <li><strong class="checklist-item p strong">Benefit:</strong> Simplifies access to compliance data and supports audits.</li>
+                </ul>
+            </div>
+
+            <div class="help-section" id="support-contacts">
+                <h2><i class="fas fa-headset"></i> 6. Support Contacts</h2>
+                <p>If secNET isn’t working or you need help, contact:</p>
+                <ul>
+                    <li><strong>Technical Support:</strong> JP Coetzer, Creator/Developer<br>Email: <a href="mailto:chair@yourwoermann.com" class="support-text">chair@yourwoermann.com</a></li>
+                    <li><strong>Branch-Specific Issues:</strong> Contact your local branch manager or supervisor.</li>
+                    <li>For urgent issues after hours, email <a href="mailto:juancoetzer@outlook.com" class="support-text">juancoetzer@outlook.com</a> / <a href="mailto:chair@yourwoermann.com" class="support-text">chair@yourwoermann.com</a>.</li>
+                </ul>
+                <a href="mailto:chair@yourwoermann.com" class="btn btn-primary support-button">Contact Support</a>
+            </div>
+
+            <div class="help-section" id="faqs">
+                <h2><i class="fas fa-question-circle"></i> 7. Frequently Asked Questions (FAQs)</h2>
+                <p>Here are answers to common questions:</p>
+                <ul>
+                    <li>
+                        <strong>How do I reset my password?</strong>
+                        <p class="faq-answer answer-yes">Contact Technical Support to reset and provide new login credentials.</p>
+                    </li>
+                    <li>
+                        <strong>Why can’t I submit a checklist?</strong>
+                        <p class="faq-answer answer-no">Ensure all required fields (name, date, shift type, checklist) are completed. If the issue persists, contact Technical Support.</p>
+                    </li>
+                    <li>
+                        <strong>What if I see an error message?</strong>
+                        <p class="faq-answer answer-no">Note the message and contact Technical Support with details.</p>
+                    </li>
+                    <li>
+                        <strong>How do I know if my checklist was reviewed?</strong>
+                        <p class="faq-answer answer-yes">Check its status in Report Explorer.<br><strong>Note:</strong> Tier 1 (CROs) will not have access to the "Report Explorer".</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>

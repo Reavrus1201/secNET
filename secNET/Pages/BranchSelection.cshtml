@@ -1,0 +1,88 @@
+﻿@page
+@model secNET.Pages.BranchSelectionModel
+@{
+    ViewData["Title"] = "Select Branch";
+}
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #FFFFFF;
+    }
+
+    .branch-selection-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 50px 20px;
+        text-align: center;
+    }
+
+        .branch-selection-container h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 30px;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 5px;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #333333;
+            border-radius: 4px;
+            background-color: #D3D3D3;
+            font-size: 16px;
+        }
+
+    .submit-button {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+        .submit-button button {
+            padding: 12px 30px;
+            background-color: #00A651;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+            .submit-button button:hover {
+                background-color: #008C44;
+            }
+</style>
+
+<div class="branch-selection-container">
+    <h2>Select Your Branch</h2>
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="SelectedBranchId">Branch:</label>
+            <select asp-for="SelectedBranchId" asp-items="Model.Branches"></select>
+            <span asp-validation-for="SelectedBranchId"></span>
+        </div>
+        <div class="submit-button">
+            <button type="submit">Continue</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

@@ -1,0 +1,117 @@
+﻿/* Header Styles */
+header {
+    z-index: 1000;
+    padding: 10px 20px;
+}
+
+.navbar {
+    background-color: #1c2526; /* Dark background to match sidebar */
+}
+
+.navbar-brand.pulse-text {
+    display: inline-block;
+    color: #FFFFFF; /* Start with white */
+    animation: colorPulse 3s infinite; /* Apply the new color pulse animation */
+}
+
+@keyframes colorPulse {
+    0% {
+        color: #FFFFFF; /* White */
+    }
+
+    50% {
+        color: #00A651; /* Green */
+    }
+
+    100% {
+        color: #FFFFFF; /* Back to White */
+    }
+}
+
+.nav-link {
+    color: #d1d5db !important; /* Light gray for nav links */
+}
+
+    .nav-link:hover {
+        color: #00A651 !important; /* Green on hover */
+    }
+
+/* Sidebar Styles (if used) */
+.sidebar {
+    position: fixed;
+    top: 56px;
+    bottom: 0;
+    left: 0;
+    width: 280px;
+    z-index: 100;
+    padding: 20px 0 0;
+    background: linear-gradient(180deg, #1c2526 0%, #2c3e50 100%);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+}
+
+    .sidebar h4 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 10px;
+    }
+
+    .sidebar .nav-link {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #d1d5db;
+        padding: 8px 12px;
+        border-radius: 5px;
+        margin: 5px 10px;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+
+        .sidebar .nav-link:hover {
+            background-color: #28a745;
+            color: #fff;
+            transform: scale(1.02);
+        }
+
+        .sidebar .nav-link:active {
+            background-color: #218838;
+            color: #fff;
+        }
+
+        .sidebar .nav-link i {
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+
+/* Main Content Styles */
+main {
+    background-color: #f8f9fa;
+    padding: 20px;
+    margin-top: 56px;
+}
+
+.card {
+    border: 1px solid #dee2e6;
+}
+
+.card-header {
+    background-color: #28a745;
+    color: white;
+}
+
+.card-body {
+    background-color: #fff;
+}
+
+#incidentsChart {
+    max-width: 400px !important;
+    max-height: 400px !important;
+    margin: 0 auto;
+}
+}
+
+.card-body {
+    padding: 0.5rem; /* Reduce padding for a tighter fit */
+}

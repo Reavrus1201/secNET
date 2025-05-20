@@ -1,0 +1,215 @@
+﻿@page
+@model PrivacyModel
+@{
+    ViewData["Title"] = "Privacy Policy";
+}
+
+<style>
+    /* Custom styles for the Privacy page (mirroring Help page) */
+    .privacy-section {
+        margin-top: 30px;
+        padding: 15px;
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+        .privacy-section h2 {
+            margin-bottom: 15px;
+            color: #2980b9;
+            font-size: 22px;
+            border-left: 4px solid #00A651;
+            padding-left: 10px;
+            position: relative;
+        }
+
+            .privacy-section h2 i {
+                margin-right: 8px;
+                color: #00A651;
+            }
+
+        .privacy-section p, .privacy-section li {
+            font-size: 16px;
+            color: #34495e;
+            line-height: 1.6;
+            margin: 8px 0;
+        }
+
+    .important-notes {
+        background-color: #e6f4ea;
+        padding: 10px;
+        border-radius: 5px;
+        color: #28a745;
+    }
+
+    .support-button {
+        margin-top: 15px;
+    }
+
+    /* Table of Contents Styles */
+    .toc-card {
+        margin-bottom: 30px;
+    }
+
+        .toc-card .card-body {
+            padding: 15px;
+        }
+
+        .toc-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc-card li {
+            margin: 8px 0;
+        }
+
+        .toc-card a {
+            color: #005A9E;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+            .toc-card a:hover {
+                color: #00A651;
+                text-decoration: underline;
+            }
+</style>
+
+<main id="main-content" style="background-image: url('/images/secNET_background_img_dash_C.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">@ViewData["Title"]</h1>
+    </div>
+
+    <!-- Table of Contents -->
+    <div class="card toc-card fade-in">
+        <div class="card-header">Table of Contents</div>
+        <div class="card-body">
+            <ul>
+                <li><a href="#introduction" class="colorPulse" aria-label="Jump to Introduction">1. Introduction</a></li>
+                <li><a href="#data-we-collect" class="colorPulse" aria-label="Jump to Data We Collect">2. Data We Collect</a></li>
+                <li><a href="#how-we-use-your-data" class="colorPulse" aria-label="Jump to How We Use Your Data">3. How We Use Your Data</a></li>
+                <li><a href="#data-storage-and-security" class="colorPulse" aria-label="Jump to Data Storage and Security">4. Data Storage and Security</a></li>
+                <li><a href="#data-sharing" class="colorPulse" aria-label="Jump to Data Sharing">5. Data Sharing</a></li>
+                <li><a href="#your-rights" class="colorPulse" aria-label="Jump to Your Rights">6. Your Rights</a></li>
+                <li><a href="#cookies-and-tracking" class="colorPulse" aria-label="Jump to Cookies and Tracking">7. Cookies and Tracking</a></li>
+                <li><a href="#contact-information" class="colorPulse" aria-label="Jump to Contact Information">8. Contact Information</a></li>
+                <li><a href="#changes-to-this-policy" class="colorPulse" aria-label="Jump to Changes to This Policy">9. Changes to This Policy</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card fade-in">
+        <div class="card-header">Privacy Policy for secNET</div>
+        <div class="card-body">
+            <div class="privacy-section" id="introduction">
+                <h2><i class="fas fa-book"></i> 1. Introduction</h2>
+                <p>
+                    secNET is designed to monitor staff compliance with company policies, rules, health and safety procedures, and regulations using a checklist system. We are committed to protecting your privacy and ensuring that your personal data is handled in a secure and transparent manner. By using secNET, you agree to the terms outlined in this Privacy Policy.
+                </p>
+            </div>
+
+            <div class="privacy-section" id="data-we-collect">
+                <h2><i class="fas fa-database"></i> 2. Data We Collect</h2>
+                <p>
+                    We collect the following types of data to operate secNET effectively:
+                </p>
+                <ul>
+                    <li><strong>Personal Information:</strong> Name, surname, username, password, and branch assignment provided during login or user management.</li>
+                    <li><strong>Operational Data:</strong> CCTV log submissions, including shift details, checklist responses, comments, and operator notes entered by CROs.</li>
+                    <li><strong>Incident Reports:</strong> Details of incidents (e.g., type, description) submitted via the Incident Report Creator.</li>
+                    <li><strong>System Logs:</strong> Audit trails of user actions (e.g., logins, report generation) for monitoring and security purposes.</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section" id="how-we-use-your-data">
+                <h2><i class="fas fa-cogs"></i> 3. How We Use Your Data</h2>
+                <p>
+                    Your data is used for the following purposes:
+                </p>
+                <ul>
+                    <li>To monitor and ensure staff compliance with company policies and procedures.</li>
+                    <li>To enable Managers/Supervisors to review and take action on CCTV logs and incidents.</li>
+                    <li>To allow Admins to manage users and configure system settings.</li>
+                    <li>To generate reports for oversight and auditing across branches.</li>
+                    <li>To troubleshoot technical issues and improve secNET functionality.</li>
+                    <li>To train secNET AI model .</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section" id="data-storage-and-security">
+                <h2><i class="fas fa-shield-alt"></i> 4. Data Storage and Security</h2>
+                <p>
+                    Your data is stored securely on our servers and is protected by:
+                </p>
+                <ul>
+                    <li>Encryption of sensitive data both in transit and at rest.</li>
+                    <li>Access controls limiting data access to authorized personnel only.</li>
+                    <li>Regular security audits and updates to address vulnerabilities.</li>
+                </ul>
+                <p class="important-notes">
+                    Data retention periods comply with applicable legal and company requirements, with logs and reports archived for a minimum of 5 years unless otherwise required.
+                </p>
+            </div>
+
+            <div class="privacy-section" id="data-sharing">
+                <h2><i class="fas fa-share-alt"></i> 5. Data Sharing</h2>
+                <p>
+                    We do not share your personal data with third parties except as follows:
+                </p>
+                <ul>
+                    <li>With Managers/Supervisors and Admins within your branch or company for review and oversight purposes.</li>
+                    <li>With legal or regulatory authorities if required by law or to protect our rights.</li>
+                </ul>
+                <p>
+                    Any data shared is limited to what is necessary and is protected under confidentiality agreements.
+                </p>
+            </div>
+
+            <div class="privacy-section" id="your-rights">
+                <h2><i class="fas fa-user-check"></i> 6. Your Rights</h2>
+                <p>
+                    You have the following rights regarding your data:
+                </p>
+                <ul>
+                    <li><strong>Access:</strong> Request a copy of your personal data held by us.</li>
+                    <li><strong>Correction:</strong> Request correction of inaccurate or incomplete data.</li>
+                    <li><strong>Deletion:</strong> Request deletion of your data where it is no longer necessary, subject to legal obligations.</li>
+                    <li><strong>Objection:</strong> Object to the processing of your data for specific purposes.</li>
+                </ul>
+                <p>
+                    To exercise these rights, contact our Technical Support team (details below).
+                </p>
+            </div>
+
+            <div class="privacy-section" id="cookies-and-tracking">
+                <h2><i class="fas fa-cookie-bite"></i> 7. Cookies and Tracking</h2>
+                <p>
+                    secNET is an internal application and does not use cookies or tracking technologies for advertising purposes. Minimal session data may be stored to maintain your login state, which is cleared upon logout.
+                </p>
+            </div>
+
+            <div class="privacy-section" id="contact-information">
+                <h2><i class="fas fa-headset"></i> 8. Contact Information</h2>
+                <p>
+                    If you have questions or concerns about this Privacy Policy or your data, please contact:
+                </p>
+                <ul>
+                    <li><strong>Technical Support:</strong> JP Coetzer, Creator/Developer<br>Email: <a href="mailto:chair@yourwoermann.com" class="support-text">chair@yourwoermann.com</a></li>
+                    <li>For urgent issues after hours, email: <a href="mailto:juancoetzer@outlook.com" class="support-text">juancoetzer@outlook.com</a></li>
+                </ul>
+                <a href="mailto:chair@yourwoermann.com" class="btn btn-primary support-button">Contact Support</a>
+            </div>
+
+            <div class="privacy-section" id="changes-to-this-policy">
+                <h2><i class="fas fa-edit"></i> 9. Changes to This Policy</h2>
+                <p>
+                    We may update this Privacy Policy periodically to reflect changes in our practices or legal requirements. Updates will be posted on this page with the revised date. We encourage you to review this policy regularly.
+                </p>
+                <p><strong>Last Updated:</strong> May 20, 2025</p>
+            </div>
+        </div>
+    </div>
+</main>

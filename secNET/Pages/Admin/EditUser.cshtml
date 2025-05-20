@@ -1,0 +1,51 @@
+﻿@page
+@model secNET.Pages.Admin.EditUserModel
+@{
+    ViewData["Title"] = "Admin - Edit User";
+}
+
+<main id="main-content">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Edit User</h1>
+    </div>
+
+    <div class="card mx-auto" style="max-width: 600px;">
+        <div class="card-body">
+            <form method="post">
+                <input type="hidden" asp-for="Input.Id" />
+
+                <div class="form-group mb-4">
+                    <label asp-for="Input.Username" class="font-weight-bold"></label>
+                    <input asp-for="Input.Username" class="form-control" />
+                    <span asp-validation-for="Input.Username" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="Input.TierLevel" class="font-weight-bold"></label>
+                    <select asp-for="Input.TierLevel" asp-items="Model.TierLevels" class="form-control">
+                        <option value="">Select a tier level</option>
+                    </select>
+                    <span asp-validation-for="Input.TierLevel" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="Input.BranchId" class="font-weight-bold"></label>
+                    <select asp-for="Input.BranchId" asp-items="Model.Branches" class="form-control">
+                        <option value="">Select a branch</option>
+                    </select>
+                    <span asp-validation-for="Input.BranchId" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-sm btn-primary mr-2">Save Changes</button>
+                    <a asp-page="./Index" class="btn btn-sm btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
